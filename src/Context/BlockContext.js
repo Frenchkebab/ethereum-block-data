@@ -9,9 +9,10 @@ const BlockContext = ({ children }) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const block = await fetchLatestBlock();
+      // const block = await fetchLatestBlock();
+      const block = 15520728;
       setLatestBlockNumber(await block);
-    }, 1000);
+    }, 2000);
 
     console.log(latestBlockNumber);
 
