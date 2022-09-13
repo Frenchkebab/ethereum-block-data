@@ -1,17 +1,28 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { fetchLatestBlock } from './fetchLatestBlock';
+import { fetchLatestBlockNumber, fetchLatestTenBlocks } from './fetchBlockData';
 
 const LatestBlock = createContext();
 export const LatestBlockState = () => useContext(LatestBlock);
 
 const BlockContext = ({ children }) => {
   const [latestBlockNumber, setLatestBlockNumber] = useState(null);
+  const [firstBlockNumberLoading, setFirstBlockNumberLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      const number = await fetchLatestBlockNumber();
+      setLatestBlockNumber(await number);
+      setFirstBlockNumberLoading(false);
+    })();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      // const block = await fetchLatestBlock();
-      const block = 15520728;
-      setLatestBlockNumber(await block);
+      const number = await fetchLatestBlockNumber();
+      // const block = 15520728;
+      if (number !== latestBlockNumber) {
+        setLatestBlockNumber(await number);
+      }
     }, 2000);
 
     console.log(latestBlockNumber);
@@ -22,7 +33,8 @@ const BlockContext = ({ children }) => {
   }, [latestBlockNumber]);
 
   return (
-    <LatestBlock.Provider value={{ latestBlockNumber }}>
+    <LatestBlock.Provider
+      value={{ latestBlockNumber, firstBlockNumberLoading }}>
       {children}
     </LatestBlock.Provider>
   );
