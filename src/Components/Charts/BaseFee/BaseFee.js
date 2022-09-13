@@ -5,33 +5,13 @@ import {
   fetchLatestBlock,
   fetchLatestTenBlocks,
 } from '../../../Context/fetchBlockData';
-import {
-  CircularProgress,
-  Container,
-  createTheme,
-  makeStyles,
-  ThemeProvider,
-} from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    width: '75%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 25,
-    padding: 40,
-  },
-}));
+import BaseFeeChart from './BaseFeeChart';
 
 const BaseFee = () => {
-  const classes = useStyles();
-
   const [tenBlocks, setTenBlocks] = useState([]);
   const [gasData, setGasData] = useState([]);
   const [firstTenBlocksLoading, setFirstTenBlocksLoading] = useState(true);
-  const { firstBlockNumberLoading, latestBlockNumber } = LatestBlockState();
+  const { latestBlockNumber } = LatestBlockState();
 
   // fetchest first ten blocks
 
@@ -57,8 +37,8 @@ const BaseFee = () => {
       const list = tenBlocks.map((block) => {
         // return ethers.utils.formatUnits(block.baseFeePerGas, 'gwei');
         return {
-          label: block.number,
-          value: ethers.utils.formatUnits(block.baseFeePerGas, 'gwei'),
+          blockNumber: block.number,
+          baseFee: ethers.utils.formatUnits(block.baseFeePerGas, 'gwei'),
         };
       });
       setGasData(list);
@@ -66,30 +46,7 @@ const BaseFee = () => {
     }
   }, [tenBlocks]);
 
-  const darkTheme = createTheme({
-    palette: {
-      primary: {
-        main: '#fff',
-      },
-      type: 'dark',
-    },
-  });
-
-  return (
-    <ThemeProvider theme={darkTheme}>
-      <Container className={classes.container}>
-        {gasData.length !== 10 ? (
-          <CircularProgress
-            style={{ color: 'gold', marginTop: 100 }}
-            size={250}
-            thickness={1}
-          />
-        ) : (
-          <div>{/* <BaseFeeChart gasData={gasData} /> */}</div>
-        )}
-      </Container>
-    </ThemeProvider>
-  );
+  return <BaseFeeChart gasData={gasData} />;
 };
 
 export default BaseFee;
