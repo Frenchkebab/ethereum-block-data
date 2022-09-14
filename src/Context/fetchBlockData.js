@@ -1,6 +1,7 @@
 // const { Alchemy } = require('alchemy-sdk');
 // const { ethers } = require('ethers');
 import { Alchemy } from 'alchemy-sdk';
+import { ethers } from 'ethers';
 
 export const alchemy = new Alchemy();
 
@@ -18,14 +19,47 @@ export const fetchLatestBlock = async (latestBlockNumber) => {
 
 export const fetchLatestTenBlocks = async (latestBlockNumber) => {
   const blocks = [];
-  for (let i = 0; i < 10; i++) {
-    const block = await alchemy.core.getBlock(latestBlockNumber - i);
+  for (let i = 9; i >= 0; i--) {
+    const block = alchemy.core.getBlock(latestBlockNumber - i);
     blocks.push(await block);
   }
   return await blocks;
 };
 
-export const main = async () => {
-  const latestBlock = await fetchLatestBlockNumber();
-  fetchLatestTenBlocks(latestBlock);
+// Transfer Volume
+export const fetchTransferData = async (fromBlock, toBlock, TOKEN_ADDRESS) => {
+  const getTransfers = alchemy.core.getAssetTransfers({
+    fromBlock,
+    toBlock,
+    withMetadata: false,
+    contractAddresses: [TOKEN_ADDRESS],
+    excludeZeroValue: true,
+    category: ['erc20'],
+  });
+  console.log(await getTransfers);
+  return (await getTransfers).transfers;
+};
+
+export const fetchTransferVolume = (latestBlockNumber, transferData) => {
+  const volume = transferData.reduce((volume, cur) => volume + cur.value, 0);
+  return { blockNumber: latestBlockNumber, volume };
+};
+
+export const fetchFirstTenTransferVolume = (
+  latestBlockNumber,
+  transferData
+) => {
+  const transferVolumeList = [];
+  for (let i = 9; i >= 0; i--) {
+    const blockNumber = latestBlockNumber - i;
+    const blockNumberHex = ethers.utils.hexlify(latestBlockNumber - i);
+    let volume = 0;
+    transferData.forEach((log) => {
+      if (log.blockNum === blockNumberHex) {
+        volume += log.value;
+      }
+    });
+    transferVolumeList.push({ blockNumber, volume });
+  }
+  return transferVolumeList;
 };

@@ -17,12 +17,14 @@ const GasRatio = () => {
 
   // updates blocks array
   useEffect(() => {
-    if (latestBlockNumber && firstTenBlocksLoading) {
-      (async () => {
-        const blocks = await fetchLatestTenBlocks(latestBlockNumber);
-        setTenBlocks(await blocks);
-        setFirstTenBlocksLoading(false);
-      })();
+    if (firstTenBlocksLoading) {
+      if (latestBlockNumber) {
+        (async () => {
+          const blocks = await fetchLatestTenBlocks(latestBlockNumber);
+          setTenBlocks(await blocks);
+          setFirstTenBlocksLoading(false);
+        })();
+      }
     } else {
       (async () => {
         const block = await fetchLatestBlock(latestBlockNumber);

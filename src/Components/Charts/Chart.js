@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -16,8 +16,10 @@ import {
   Container,
   createTheme,
   makeStyles,
+  TextField,
   ThemeProvider,
 } from '@material-ui/core';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -44,8 +46,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 0,
-    padding: 40,
+    marginTop: 10,
     [theme.breakpoints.down('md')]: {
       width: '100%',
       marginTop: 0,
@@ -54,8 +55,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Chart = ({ dataLabels, label, data }) => {
+const Chart = ({ dataLabels, label, data, textField, setTokenAddress }) => {
   const classes = useStyles();
+  const [search, setSearch] = useState(
+    '0xdac17f958d2ee523a2206206994597c13d831ec7'
+  );
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -93,6 +97,18 @@ const Chart = ({ dataLabels, label, data }) => {
             }}
           />
         )}
+        {textField ? (
+          <TextField
+            label='ERC20 Contract Address'
+            variant='outlined'
+            style={{ marginTop: 25, width: '60%' }}
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setTokenAddress(e.target.value);
+            }}
+          />
+        ) : null}
       </Container>
     </ThemeProvider>
   );
