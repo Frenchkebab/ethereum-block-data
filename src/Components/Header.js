@@ -11,13 +11,21 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
 const useStyles = makeStyles(() => ({
-  title: {
-    flex: 1,
+  homeTitle: {
+    display: 'flex',
     color: 'gold',
     fontFamily: 'Montserrat',
     fontWeight: 'bold',
     cursor: 'pointer',
-    height: '40',
+    height: '100%',
+    marginRight: 50,
+  },
+  select: {
+    color: 'white',
+    fontFamily: 'Montserrat',
+    cursor: 'pointer',
+    height: '100%',
+    marginRight: 50,
   },
 }));
 
@@ -40,9 +48,27 @@ const Header = () => {
           <Toolbar>
             <Typography
               onClick={() => navigate('/')}
-              className={classes.title}
+              className={classes.homeTitle}
               variant='h6'>
               Home
+            </Typography>
+            <Typography
+              onClick={() => navigate('/transferVolume')}
+              className={classes.select}
+              variant='h6'>
+              Transfer Volume
+            </Typography>
+            <Typography
+              onClick={() => navigate('/baseFee')}
+              className={classes.select}
+              variant='h6'>
+              Base Fee
+            </Typography>
+            <Typography
+              onClick={() => navigate('/gasRatio')}
+              className={classes.select}
+              variant='h6'>
+              Gas Ratio
             </Typography>
           </Toolbar>
         </Container>

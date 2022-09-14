@@ -1,10 +1,9 @@
 import React from 'react';
-import { LatestBlockState } from '../Context/BlockContext';
+import MenuCards from '../Components/HomeCard/MenuCards';
 
 const HomePage = () => {
-  const { latestBlockNumber } = LatestBlockState();
-  console.log('context api: ', latestBlockNumber);
-  return <div>HomePage</div>;
+  // console.log('HomePage: ', fetchBaseFee());
+  return <MenuCards />;
 };
 
 export default HomePage;
