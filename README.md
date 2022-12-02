@@ -4,7 +4,8 @@ https://ethereum-block-chart.netlify.app/
 
 ## ERC20 Transfer
 
-You can check transfer volume per block for last 10 blocks
+You can check transfer volume per block for last 10 blocks  
+(Tether address is set by default, but you can put any ERC20 contract address as an input)
 
 ## Base Fee
 
